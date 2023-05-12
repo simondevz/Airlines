@@ -1,0 +1,47 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.5rem;
+
+    .filter_div {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        button {
+            min-width: 2rem;
+            box-sizing: border-box;
+            height: 2rem;
+            color: inherit;
+        }
+    }
+
+    .search_div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        min-height: 3rem;
+
+        .filter {
+            display: flex;
+            align-content: center;
+            color: black;
+
+            .filter_button {
+                min-width: 2rem;
+            }
+        }
+
+        .search {
+            margin: 0.5rem 1rem 0.5rem 2rem;
+            width: 10rem;
+        }
+    }
+}
+
+.dashboard_text {
+    font-weight: 900;
+    font-size: 1.5rem;
+    padding: 0 0.5rem;
+}

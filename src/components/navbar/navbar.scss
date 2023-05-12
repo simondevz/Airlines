@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Shrikhand&family=VT323&display=swap");
+
+.navbar {
+    display: flex;
+    width: 100vw;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 2rem;
+    padding: .5rem;
+
+    .text {
+        font-weight: 700;
+        font-size: 1.2rem;
+        align-self: center;
+        font-family: "Shrikhand", cursive;
+        //font-family: "VT323", monospace;
+    }
+
+    .logout_container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .logout {
+        }
+    }
+}
