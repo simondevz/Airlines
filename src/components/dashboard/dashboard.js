@@ -4,248 +4,245 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 import {
-    Button,
-    Menu,
-    MenuItem,
-    TextField,
-    InputAdornment,
+  Button,
+  Menu,
+  MenuItem,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import TableComponent from "../table/table";
 import Navbar from "../navbar/navbar";
 import "./dashboard.scss";
 
 function Dashboard() {
-    const { user, data, time } = useLoaderData();
-    const [search, setSearch] = useState("");
-    const dataRef = useRef(data);
+  const { user, data, time } = useLoaderData();
+  const [search, setSearch] = useState("");
+  const dataRef = useRef(data);
 
-    const [processedData, setProcessedData] = useState({});
-    const [displayData, setDisplayData] = useState({});
-    const processedDataRef = useRef(processedData);
+  const [processedData, setProcessedData] = useState({});
+  const [displayData, setDisplayData] = useState({});
+  const processedDataRef = useRef(processedData);
 
-    const [menu, setMenu] = useState({
-        open: false,
-        anchorEl: null,
-    });
+  const [menu, setMenu] = useState({
+    open: false,
+    anchorEl: null,
+  });
 
-    const [active, setActive] = useState("all");
-    const activeStyle = {
-        borderBottom: ".13rem solid black",
-    };
+  const [active, setActive] = useState("all");
+  const activeStyle = {
+    borderBottom: ".13rem solid black",
+  };
 
-    useEffect(() => {
-        for (let i = 0; i < dataRef.current.length; i++) {
-            let depature = dataRef.current[i].estDepartureAirport;
-            let arrival = dataRef.current[i].estArrivalAirport;
+  useEffect(() => {
+    for (let i = 0; i < dataRef.current.length; i++) {
+      let depature = dataRef.current[i].estDepartureAirport;
+      let arrival = dataRef.current[i].estArrivalAirport;
 
-            let date = new Date(time * 1000);
-            let timeString = `${date.getUTCHours()}:${date.getUTCMinutes()} ${
-                date.getUTCHours() < 11 ? "AM" : "PM"
-            } UTC`;
+      let date = new Date(time * 1000);
+      let timeString = `${date.getUTCHours()}:${date.getUTCMinutes()} ${
+        date.getUTCHours() < 11 ? "AM" : "PM"
+      } UTC`;
 
-            if (depature != null)
-                if (processedDataRef.current?.[depature]) {
-                    processedDataRef.current[depature].depatures++;
-                } else {
-                    processedDataRef.current = {
-                        ...processedDataRef.current,
-                        [depature]: {
-                            depatures: 1,
-                            arrivals: 0,
-                            time: timeString,
-                        },
-                    };
-                }
-
-            if (arrival != null)
-                if (processedDataRef.current?.[arrival]) {
-                    processedDataRef.current[arrival].arrivals++;
-                } else {
-                    processedDataRef.current = {
-                        ...processedDataRef.current,
-                        [arrival]: {
-                            depatures: 0,
-                            arrivals: 1,
-                            time: timeString,
-                        },
-                    };
-                }
+      if (depature != null)
+        if (processedDataRef.current?.[depature]) {
+          processedDataRef.current[depature].depatures++;
+        } else {
+          processedDataRef.current = {
+            ...processedDataRef.current,
+            [depature]: {
+              depatures: 1,
+              arrivals: 0,
+              time: timeString,
+            },
+          };
         }
 
-        setProcessedData((processedData) => processedDataRef.current);
-        setDisplayData((displayData) => processedDataRef.current);
-    }, [dataRef, processedDataRef, time]);
+      if (arrival != null)
+        if (processedDataRef.current?.[arrival]) {
+          processedDataRef.current[arrival].arrivals++;
+        } else {
+          processedDataRef.current = {
+            ...processedDataRef.current,
+            [arrival]: {
+              depatures: 0,
+              arrivals: 1,
+              time: timeString,
+            },
+          };
+        }
+    }
 
-    const handleClose = () => setMenu({ open: false, anchorEl: null });
+    setProcessedData((processedData) => processedDataRef.current);
+    setDisplayData((displayData) => processedDataRef.current);
+  }, [dataRef, processedDataRef, time]);
 
-    return (
-        <>
-            <Navbar />
-            <div className="dashboard_text">Welcome Back, {user.username}</div>
-            <div className="dashboard">
-                <div className="filter_div">
-                    <Button
-                        size="small"
-                        style={active === "all" ? activeStyle : null}
-                        onClick={() => {
-                            setDisplayData(processedData);
-                            setActive("all");
-                        }}
-                    >
-                        All
-                    </Button>
+  const handleClose = () => setMenu({ open: false, anchorEl: null });
 
-                    <Button
-                        size="small"
-                        style={active === "arriving" ? activeStyle : null}
-                        onClick={() => {
-                            let temp = {};
-                            for (let airport in processedData) {
-                                if (processedData[airport].arrivals > 0)
-                                    temp = {
-                                        ...temp,
-                                        [airport]: {
-                                            time: processedData[airport].time,
-                                            arrivals:
-                                                processedData[airport].arrivals,
-                                        },
-                                    };
-                            }
-                            setDisplayData(temp);
-                            setActive("arriving");
-                        }}
-                    >
-                        Arriving
-                    </Button>
+  return (
+    <>
+      <Navbar />
+      <div className="dashboard_text">Welcome Back, {user.username}</div>
+      <div className="dashboard">
+        <div className="filter_div">
+          <Button
+            size="small"
+            style={active === "all" ? activeStyle : null}
+            onClick={() => {
+              setDisplayData(processedData);
+              setActive("all");
+            }}
+          >
+            All
+          </Button>
 
-                    <Button
-                        size="small"
-                        style={active === "departing" ? activeStyle : null}
-                        onClick={() => {
-                            let temp = {};
-                            for (let airport in processedData) {
-                                if (processedData[airport].depatures > 0)
-                                    temp = {
-                                        ...temp,
-                                        [airport]: {
-                                            time: processedData[airport].time,
-                                            depatures:
-                                                processedData[airport]
-                                                    .depatures,
-                                        },
-                                    };
-                            }
-                            setDisplayData(temp);
-                            setActive("departing");
-                        }}
-                    >
-                        Departing
-                    </Button>
-                </div>
+          <Button
+            size="small"
+            style={active === "arriving" ? activeStyle : null}
+            onClick={() => {
+              let temp = {};
+              for (let airport in processedData) {
+                if (processedData[airport].arrivals > 0)
+                  temp = {
+                    ...temp,
+                    [airport]: {
+                      time: processedData[airport].time,
+                      arrivals: processedData[airport].arrivals,
+                    },
+                  };
+              }
+              setDisplayData(temp);
+              setActive("arriving");
+            }}
+          >
+            Arriving
+          </Button>
 
-                <div className="search_div">
-                    <div className="filter">
-                        <Button
-                            size="small"
-                            color="inherit"
-                            className="filter_button"
-                            onClick={(event) =>
-                                setMenu({
-                                    ...menu,
-                                    open: !menu.open,
-                                    anchorEl: menu.open ? null : event.target,
-                                })
-                            }
-                        >
-                            <FilterListIcon />
-                        </Button>
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={menu.anchorEl}
-                            open={menu.open}
-                            onClose={handleClose}
-                            MenuListProps={{
-                                "aria-labelledby": "basic-button",
-                            }}
-                        >
-                            <MenuItem
-                                onClick={() => {
-                                    let keys = Object.keys(processedData);
-                                    let temp = {};
-                                    keys.sort();
+          <Button
+            size="small"
+            style={active === "departing" ? activeStyle : null}
+            onClick={() => {
+              let temp = {};
+              for (let airport in processedData) {
+                if (processedData[airport].depatures > 0)
+                  temp = {
+                    ...temp,
+                    [airport]: {
+                      time: processedData[airport].time,
+                      depatures: processedData[airport].depatures,
+                    },
+                  };
+              }
+              setDisplayData(temp);
+              setActive("departing");
+            }}
+          >
+            Departing
+          </Button>
+        </div>
 
-                                    for (let i = 0; i < keys.length; i++) {
-                                        temp = {
-                                            ...temp,
-                                            [keys[i]]: processedData[keys[i]],
-                                        };
-                                    }
-                                    setDisplayData(temp);
-                                    setActive("all");
-                                    handleClose();
-                                }}
-                            >
-                                A - Z
-                            </MenuItem>
+        <div className="search_div">
+          <div className="filter">
+            <Button
+              size="small"
+              color="inherit"
+              className="filter_button"
+              onClick={(event) =>
+                setMenu({
+                  ...menu,
+                  open: !menu.open,
+                  anchorEl: menu.open ? null : event.target,
+                })
+              }
+            >
+              <FilterListIcon />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={menu.anchorEl}
+              open={menu.open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  let keys = Object.keys(processedData);
+                  let temp = {};
+                  keys.sort();
 
-                            <MenuItem
-                                onClick={() => {
-                                    let keys = Object.keys(processedData);
-                                    let temp = {};
-                                    keys.sort().reverse();
+                  for (let i = 0; i < keys.length; i++) {
+                    temp = {
+                      ...temp,
+                      [keys[i]]: processedData[keys[i]],
+                    };
+                  }
+                  setDisplayData(temp);
+                  setActive("all");
+                  handleClose();
+                }}
+              >
+                A - Z
+              </MenuItem>
 
-                                    for (let i = 0; i < keys.length; i++) {
-                                        temp = {
-                                            ...temp,
-                                            [keys[i]]: processedData[keys[i]],
-                                        };
-                                    }
-                                    setDisplayData(temp);
-                                    setActive("all");
-                                    handleClose();
-                                }}
-                            >
-                                Z - A
-                            </MenuItem>
-                        </Menu>
-                    </div>
+              <MenuItem
+                onClick={() => {
+                  let keys = Object.keys(processedData);
+                  let temp = {};
+                  keys.sort().reverse();
 
-                    <TextField
-                        placeholder="Search"
-                        className="search"
-                        size="small"
-                        onChange={(event) => {
-                            let entry = event.target.value.toUpperCase();
-                            setSearch(entry);
+                  for (let i = 0; i < keys.length; i++) {
+                    temp = {
+                      ...temp,
+                      [keys[i]]: processedData[keys[i]],
+                    };
+                  }
+                  setDisplayData(temp);
+                  setActive("all");
+                  handleClose();
+                }}
+              >
+                Z - A
+              </MenuItem>
+            </Menu>
+          </div>
 
-                            let keys = Object.keys(processedData);
-                            let temp = {};
-                            keys.sort();
+          <TextField
+            placeholder="Search"
+            className="search"
+            size="small"
+            onChange={(event) => {
+              let entry = event.target.value.toUpperCase();
+              setSearch(entry);
 
-                            for (let i = 0; i < keys.length; i++) {
-                                if (keys[i].startsWith(entry))
-                                    temp = {
-                                        ...temp,
-                                        [keys[i]]: processedData[keys[i]],
-                                    };
-                            }
-                            setDisplayData(temp);
-                            setActive("all");
-                        }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                        value={search}
-                    />
-                </div>
-            </div>
-            <TableComponent displayData={displayData} />
-        </>
-    );
+              let keys = Object.keys(processedData);
+              let temp = {};
+              keys.sort();
+
+              for (let i = 0; i < keys.length; i++) {
+                if (keys[i].startsWith(entry))
+                  temp = {
+                    ...temp,
+                    [keys[i]]: processedData[keys[i]],
+                  };
+              }
+              setDisplayData(temp);
+              setActive("all");
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            value={search}
+          />
+        </div>
+      </div>
+      <TableComponent displayData={displayData} />
+    </>
+  );
 }
 
 export default Dashboard;
