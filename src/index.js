@@ -34,6 +34,7 @@ const router = createBrowserRouter([
                             time - 7200
                         }&end=${time}`
                     );
+                    console.log(response)
                     const data = await response.json();
 
                     return {
