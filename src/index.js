@@ -34,7 +34,8 @@ const router = createBrowserRouter([
               time - 7000
             }&end=${time}`
           );
-
+          console.log(response)
+            
           if (response.status !== 200) {
             throw json({
               msg: "Sorry, something went wrong",
