@@ -35,8 +35,8 @@ const router = createBrowserRouter([
             
           if (response.status !== 200) {
             throw json({
-              msg: "Sorry, something went wrong",
-              status: response.status,
+              msg: "Sorry, something went wrong"},{
+              status: response.status
             });
           }
           const data = await response.json();
