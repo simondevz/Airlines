@@ -19,7 +19,6 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -31,15 +30,20 @@ const router = createBrowserRouter([
 
           const response = await fetch(
             `https://opensky-network.org/api/flights/all?begin=${
-              time - 7000
+              time - 7100
             }&end=${time}`
           );
+          console.log(response);
 
           if (response.status !== 200) {
-            throw json({
-              msg: "Sorry, something went wrong",
-              status: response.status,
-            });
+            throw json(
+              {
+                msg: "Sorry, something went wrong",
+              },
+              {
+                status: response.status,
+              }
+            );
           }
           const data = await response.json();
 

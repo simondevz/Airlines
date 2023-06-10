@@ -2,6 +2,7 @@ import { useRouteError } from "react-router-dom";
 
 function ErrorPage() {
   let error = useRouteError();
+  console.log(error);
 
   return (
     <>
@@ -12,7 +13,7 @@ function ErrorPage() {
           textAlign: "center",
         }}
       >
-        {error.msg}
+        {error.data.msg}
       </div>
       <p
         style={{
