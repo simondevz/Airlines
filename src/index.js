@@ -31,6 +31,13 @@ const router = createBrowserRouter([
 
           const response = await fetch(
             `https://opensky-network.org/api/flights/all?begin=${
+              time - 7000
+            }&end=${time}`
+          );
+          console.log(response);
+          const data = await response.json();
+          const response = await fetch(
+            `https://opensky-network.org/api/flights/all?begin=${
               time - 7200
             }&end=${time}`
           );
