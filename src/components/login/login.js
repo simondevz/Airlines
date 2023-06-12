@@ -18,7 +18,7 @@ function Login() {
                 <TextField
                     id="username"
                     className="username"
-                    label="Username"
+                    label="Username (Admin)"
                     variant="standard"
                     value={state.username}
                     onChange={(event) =>
@@ -28,7 +28,7 @@ function Login() {
                 <TextField
                     id="password"
                     className="password"
-                    label="Password"
+                    label="Password (12345678)"
                     variant="standard"
                     value={state.password}
                     onChange={(event) =>
